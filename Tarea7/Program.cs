@@ -55,6 +55,40 @@ class CuentaBancaria
     }
 }
 
+// Ejercicio 2: Libro
+class Libro
+{
+    private string titulo;
+    private bool disponible;
+
+    public Libro(string titulo)
+    {
+        this.titulo = titulo;
+        this.disponible = true; // al crearse, siempre esta disponible
+    }
+
+    public string Titulo
+    {
+        get { return titulo; }
+    }
+
+    public bool Disponible
+    {
+        get { return disponible; }
+    }
+
+    // Devuelve false si el libro ya estaba prestado
+    public bool Prestar()
+    {
+        if (!disponible)
+        {
+            return false;
+        }
+        disponible = false;
+        return true;
+    }
+}
+
 // ===================== PROGRAMA =====================
 
 class Program
@@ -133,7 +167,45 @@ class Program
     // Ejercicio 2: Prestamo de libros
     static void Ejercicio2()
     {
-        // pendiente
+        List<Libro> libros = new List<Libro>();
+        libros.Add(new Libro("El Principito"));
+        libros.Add(new Libro("Don Quijote"));
+        libros.Add(new Libro("Rayuela"));
+
+        for (int pedido = 1; pedido <= 2; pedido++)
+        {
+            Console.Write("Titulo del libro (pedido " + pedido + "): ");
+            string buscado = Console.ReadLine();
+
+            Libro encontrado = null;
+            foreach (Libro l in libros)
+            {
+                if (l.Titulo.ToLower() == buscado.ToLower())
+                {
+                    encontrado = l;
+                }
+            }
+
+            if (encontrado == null)
+            {
+                Console.WriteLine("No existe el libro " + buscado);
+            }
+            else if (encontrado.Prestar())
+            {
+                Console.WriteLine("Prestado: " + encontrado.Titulo);
+            }
+            else
+            {
+                Console.WriteLine(encontrado.Titulo + " ya esta prestado");
+            }
+        }
+
+        Console.WriteLine("Estado de la biblioteca:");
+        foreach (Libro l in libros)
+        {
+            string estado = l.Disponible ? "Disponible" : "Prestado";
+            Console.WriteLine(l.Titulo + " - " + estado);
+        }
     }
 
     // Ejercicio 3: Agenda de contactos con archivo
