@@ -89,6 +89,24 @@ class Libro
     }
 }
 
+// Ejercicio 3: Contacto
+class Contacto
+{
+    private string nombre;
+    private string telefono;
+
+    public Contacto(string nombre, string telefono)
+    {
+        this.nombre = nombre;
+        this.telefono = telefono;
+    }
+
+    public string ALinea()
+    {
+        return nombre + ";" + telefono;
+    }
+}
+
 // ===================== PROGRAMA =====================
 
 class Program
@@ -211,7 +229,32 @@ class Program
     // Ejercicio 3: Agenda de contactos con archivo
     static void Ejercicio3()
     {
-        // pendiente
+        int cantidad = LeerEntero("Cantidad de contactos: ");
+        List<Contacto> contactos = new List<Contacto>();
+
+        for (int i = 1; i <= cantidad; i++)
+        {
+            Console.Write("Nombre del contacto " + i + ": ");
+            string nombre = Console.ReadLine();
+            Console.Write("Telefono: ");
+            string telefono = Console.ReadLine();
+            contactos.Add(new Contacto(nombre, telefono));
+        }
+
+        List<string> lineas = new List<string>();
+        foreach (Contacto c in contactos)
+        {
+            lineas.Add(c.ALinea());
+        }
+        File.WriteAllLines("contactos.txt", lineas);
+        Console.WriteLine("Contactos guardados: " + contactos.Count);
+
+        Console.WriteLine("Leyendo contactos.txt:");
+        foreach (string linea in File.ReadAllLines("contactos.txt"))
+        {
+            string[] partes = linea.Split(';');
+            Console.WriteLine(partes[0] + " - Tel: " + partes[1]);
+        }
     }
 
     // Ejercicio 4: Mi propia clase
