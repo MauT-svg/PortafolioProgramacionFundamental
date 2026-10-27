@@ -107,6 +107,44 @@ class Contacto
     }
 }
 
+// Ejercicio 4: Mi propia clase -> Planta
+class Planta
+{
+    private string nombre;
+    private string especie;
+    private int altura; // en cm
+
+    public Planta(string nombre, string especie, int altura)
+    {
+        this.nombre = nombre;
+        this.especie = especie;
+        Altura = altura; // usa la propiedad para validar
+    }
+
+    // Propiedad con validacion: la altura no puede ser negativa
+    public int Altura
+    {
+        get { return altura; }
+        set
+        {
+            if (value < 0) throw new ArgumentOutOfRangeException("altura");
+            altura = value;
+        }
+    }
+
+    // Metodo 1: la planta crece
+    public void Crecer(int cm)
+    {
+        Altura = Altura + cm;
+    }
+
+    // Metodo 2: devuelve el texto para guardar en el archivo
+    public string ALinea()
+    {
+        return nombre + ";" + especie + ";" + altura;
+    }
+}
+
 // ===================== PROGRAMA =====================
 
 class Program
@@ -257,9 +295,60 @@ class Program
         }
     }
 
-    // Ejercicio 4: Mi propia clase
+    // Ejercicio 4: Mi propia clase (Planta)
     static void Ejercicio4()
     {
-        // pendiente
+        int cantidad = LeerEntero("Cantidad de plantas (minimo 3): ");
+        while (cantidad < 3)
+        {
+            Console.WriteLine("Minimo 3 plantas");
+            cantidad = LeerEntero("Cantidad de plantas (minimo 3): ");
+        }
+
+        List<Planta> plantas = new List<Planta>();
+        for (int i = 1; i <= cantidad; i++)
+        {
+            Console.Write("Nombre de la planta " + i + ": ");
+            string nombre = Console.ReadLine();
+            Console.Write("Especie: ");
+            string especie = Console.ReadLine();
+
+            // Repite la altura hasta que sea valida (no negativa)
+            Planta nueva = null;
+            while (nueva == null)
+            {
+                int altura = LeerEntero("Altura en cm: ");
+                try
+                {
+                    nueva = new Planta(nombre, especie, altura); // el set puede lanzar error
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("Error: la altura no puede ser negativa");
+                }
+            }
+            plantas.Add(nueva);
+        }
+
+        // Despues de regarlas, cada planta crece 2 cm
+        foreach (Planta p in plantas)
+        {
+            p.Crecer(2);
+        }
+
+        List<string> lineas = new List<string>();
+        foreach (Planta p in plantas)
+        {
+            lineas.Add(p.ALinea());
+        }
+        File.WriteAllLines("plantas.txt", lineas);
+        Console.WriteLine("Plantas guardadas: " + plantas.Count);
+
+        Console.WriteLine("Leyendo plantas.txt:");
+        foreach (string linea in File.ReadAllLines("plantas.txt"))
+        {
+            string[] partes = linea.Split(';');
+            Console.WriteLine(partes[0] + " (" + partes[1] + ") - " + partes[2] + " cm");
+        }
     }
 }
