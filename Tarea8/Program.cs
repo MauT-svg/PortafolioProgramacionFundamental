@@ -73,6 +73,53 @@ class Camion : Vehiculo
     }
 }
 
+// ===================== EJERCICIO 2: CUENTAS =====================
+class Cuenta
+{
+    protected string titular;
+    protected int saldo;
+
+    public Cuenta(string titular, int saldo)
+    {
+        this.titular = titular;
+        this.saldo = saldo;
+    }
+
+    public virtual bool Retirar(int monto)
+    {
+        if (saldo >= monto)
+        {
+            saldo = saldo - monto;
+            return true;
+        }
+        return false;
+    }
+
+    public void IntentarRetiro(int monto)
+    {
+        bool aprobado = Retirar(monto);
+        string estado = aprobado ? "aprobado" : "rechazado";
+        Console.WriteLine(titular + ": retiro de " + monto + " Bs " + estado + ". Saldo: " + saldo + " Bs");
+    }
+}
+
+class CuentaCorriente : Cuenta
+{
+    private int limiteSobregiro = 500;
+
+    public CuentaCorriente(string titular, int saldo) : base(titular, saldo) { }
+
+    public override bool Retirar(int monto)
+    {
+        if (saldo - monto < -limiteSobregiro)
+        {
+            return false;
+        }
+        saldo = saldo - monto;
+        return true;
+    }
+}
+
 class Program
 {
     static void Main()
@@ -151,7 +198,19 @@ class Program
     // Ejercicio 2: Cuenta de ahorro y corriente
     static void Ejercicio2()
     {
-        // escribe aqui tu codigo
+        Console.Write("Saldo inicial: ");
+        int saldoInicial = int.Parse(Console.ReadLine());
+        Console.Write("Monto a retirar: ");
+        int monto = int.Parse(Console.ReadLine());
+
+        List<Cuenta> cuentas = new List<Cuenta>();
+        cuentas.Add(new Cuenta("Ahorro", saldoInicial));
+        cuentas.Add(new CuentaCorriente("Corriente", saldoInicial));
+
+        foreach (Cuenta c in cuentas)
+        {
+            c.IntentarRetiro(monto);
+        }
     }
 
     // Ejercicio 3: Mi propia jerarquia
