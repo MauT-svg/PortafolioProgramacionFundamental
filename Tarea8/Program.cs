@@ -120,6 +120,74 @@ class CuentaCorriente : Cuenta
     }
 }
 
+// ===================== EJERCICIO 3: MI JERARQUIA (Personajes de un juego) =====================
+class Personaje
+{
+    protected string nombre;
+    protected int vida;
+
+    public Personaje(string nombre, int vida)
+    {
+        this.nombre = nombre;
+        this.vida = vida;
+    }
+
+    public virtual int Atacar()
+    {
+        return 5;
+    }
+
+    public void Presentar()
+    {
+        Console.WriteLine(nombre + " (vida " + vida + ") ataca con " + Atacar() + " de dano");
+    }
+}
+
+class Guerrero : Personaje
+{
+    private int fuerza;
+
+    public Guerrero(string nombre, int vida, int fuerza) : base(nombre, vida)
+    {
+        this.fuerza = fuerza;
+    }
+
+    public override int Atacar()
+    {
+        return fuerza * 3;
+    }
+}
+
+class Mago : Personaje
+{
+    private int mana;
+
+    public Mago(string nombre, int vida, int mana) : base(nombre, vida)
+    {
+        this.mana = mana;
+    }
+
+    public override int Atacar()
+    {
+        return mana * 2;
+    }
+}
+
+class Arquero : Personaje
+{
+    private int flechas;
+
+    public Arquero(string nombre, int vida, int flechas) : base(nombre, vida)
+    {
+        this.flechas = flechas;
+    }
+
+    public override int Atacar()
+    {
+        return flechas + 10;
+    }
+}
+
 class Program
 {
     static void Main()
@@ -213,9 +281,18 @@ class Program
         }
     }
 
-    // Ejercicio 3: Mi propia jerarquia
+    // Ejercicio 3: Mi propia jerarquia (Personajes)
     static void Ejercicio3()
     {
-        // escribe aqui tu codigo
+        List<Personaje> equipo = new List<Personaje>();
+        equipo.Add(new Guerrero("Thor", 100, 8));
+        equipo.Add(new Mago("Merlin", 70, 15));
+        equipo.Add(new Arquero("Legolas", 80, 12));
+        equipo.Add(new Personaje("Aldeano", 30));
+
+        foreach (Personaje p in equipo)
+        {
+            p.Presentar();
+        }
     }
 }
